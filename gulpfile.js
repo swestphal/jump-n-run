@@ -34,25 +34,25 @@ var config = {
     }
 };
 
-gulp.task("lint", function() {
-    return gulp
-        .src(["./app/assets/scripts/**/*.js"])
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failOnError());
-});
+// gulp.task("lint", function() {
+//     return gulp
+//         .src(["./app/assets/scripts/**/*.js"])
+//         .pipe(eslint())
+//         .pipe(eslint.format())
+//         .pipe(eslint.failOnError());
+// });
 
-gulp.task("unitTests", function() {
-    gulp.src("tests/spec/extraSpec.js").pipe(jasmine());
-});
+// gulp.task("unitTests", function() {
+//     gulp.src("tests/spec/extraSpec.js").pipe(jasmine());
+// });
 
-gulp.task("integrationTests", function() {
-    gulp.src("tests/spec/extraSpec.js").pipe(
-        jasmine({
-            integration: true
-        })
-    );
-});
+// gulp.task("integrationTests", function() {
+//     gulp.src("tests/spec/extraSpec.js").pipe(
+//         jasmine({
+//             integration: true
+//         })
+//     );
+// });
 
 gulp.task("createSprite", ["beginClean"], function() {
     return gulp
@@ -129,7 +129,7 @@ gulp.task("watch", function() {
 
     watch("./app/assets/scripts/**/*.js", function() {
         gulp.start("scriptsRefresh");
-        gulp.start("lint");
+        //gulp.start("lint");
     });
 });
 

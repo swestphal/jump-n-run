@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://swestphal@github.com/swestphal/jump-n-run.git"
+    "url": "git+https://swestphal@github.com/swestphal/pac-man.git"
   },
   "dependencies": {
     "jquery": "^3.2.1",

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+    // function Greeting() {
+    //     var saying = "hello";
+    //     this.sayHello = function() { // JavaScript closure
+    //         var name = "Bob";
+    //         console.log(saying + " " + name);
+    //     }
+    //     this.sayGoodbye = function() {
+    //         // this function cannot access the variable 'name' from the previous closure
+    //         console.log("goodbye '" + name + "'");
+    //     }
+    // }
+    // greet = new Greeting();
+    // greet.sayHello(); // "hello Bob"
+    // greet.sayGoodbye(); // "goodbye ""
+    //
+    function Example() {
+        this.base = 10; // public variable
+        function isEven() { // private helper function
+            //return this.base % 2 === 0;     // this this is global windows object
+
+        }
+        this.calculate = function() { // public function
+
+            // if (isEven()) {    // this is in the isEven function then global windows object
+            if (isEven.bind(this)) {
+                console.log("even");
+
+            } else {
+                console.log("odd");
+            }
+        }
+    }
+    e = new Example();
+    e.calculate(); // "odd"
+    </script>
+</body>
+
+</html>
