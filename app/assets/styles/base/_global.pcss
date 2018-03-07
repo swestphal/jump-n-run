@@ -1,18 +1,40 @@
 body {
-  font-family: 'Roboto', sans-serif;
-  color:#333;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #333;
 }
 
 
 img {
-  max-width:100%;
-  height:auto;
+    max-width: 100%;
+    height: auto;
 }
 
 * {
-  box-sizing:border-box;
+    box-sizing: border-box;
 }
 
 a {
-  color:$mainOrange;
+    color: $mainOrange;
+}
+
+.wrapper {
+    width: 600px;
+    height: 360px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid black;
+    z-index: 1;
+    width: 600px;
+    height: 360px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
