@@ -16,6 +16,7 @@ window.requestAnimFrame = (function() {
     );
 })();
 
+var myObstacle;
 var myGamePiece;
 var myGameArea;
 var ctx;
@@ -24,6 +25,7 @@ function startGame() {
     /* instanciate new gameComponent */
     myGamePiece = new GameComponent(30, 30, "red", 10, 120);
     myGameArea = new GameArea(480, 270);
+    myObstacle = new GameComponent(10, 200, "green", 300, 120);
     myGameArea.start();
 }
 
@@ -31,6 +33,11 @@ function GameArea(width, height) {
     this.width = width;
     this.height = height;
 }
+
+/**
+ * initialising canvas, and evenlisteners
+ * @return {[type]} [description]
+ */
 GameArea.prototype.start = function() {
     this.canvas = document.getElementById("canvas");
     this.context = canvas.getContext("2d");
@@ -42,8 +49,18 @@ GameArea.prototype.start = function() {
         myGameArea.keys[e.keyCode] = e.type == "keydown";
     });
 
+    // window.addEventListener('touchmove', function (e) {
+    //         myGameArea.x = e.touches[0].screenX;
+    //         myGameArea.y = e.touches[0].screenY;
+    //     })
+    // window.addEventListener("mousemove", function(e) {
+    //     myGamePiece.x = e.pageX;
+    //     myGamePiece.y = e.pageY;
+    // });
+
     this.update();
 };
+
 GameArea.prototype.update = function() {
     this.clear();
 
@@ -62,13 +79,22 @@ GameArea.prototype.update = function() {
         myGamePiece.speedY = 1;
     }
     myGamePiece.newPos();
+
+    if (myGamePiece.isCollisionWith(myObstacle)) {
+        myGamePiece.crash();
+    }
     myGamePiece.update();
+    myObstacle.update();
 
     var req = window.requestAnimFrame(this.update.bind(this));
 };
 
 GameArea.prototype.clear = function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+};
+
+GameArea.prototype.stop = function() {
+    // TODO clear interval
 };
 
 /**
@@ -84,16 +110,42 @@ function GameComponent(width, height, color, x, y) {
     this.x = x;
     this.y = y;
     this.color = color;
-    this.update = function() {
-        ctx = myGameArea.context;
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    };
 }
+
+GameComponent.prototype.update = function() {
+    ctx = myGameArea.context;
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+};
 
 GameComponent.prototype.newPos = function() {
     this.x += this.speedX;
     this.y += this.speedY;
+};
+
+GameComponent.prototype.crash = function() {
+    this.color = "green";
+};
+
+GameComponent.prototype.isCollisionWith = function(objToTest) {
+    var myleft = this.x;
+    var myright = this.x + this.width;
+    var mytop = this.y;
+    var mybottom = this.y + this.height;
+    var otherleft = objToTest.x;
+    var otherright = objToTest.x + objToTest.width;
+    var othertop = objToTest.y;
+    var otherbottom = objToTest.y + objToTest.height;
+    var crash = true;
+    if (
+        mybottom < othertop ||
+        mytop > otherbottom ||
+        myright < otherleft ||
+        myleft > otherright
+    ) {
+        crash = false;
+    }
+    return crash;
 };
 
 startGame();
