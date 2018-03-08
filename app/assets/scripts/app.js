@@ -41,6 +41,11 @@ function GameArea(width, height) {
 GameArea.prototype.start = function() {
     this.canvas = document.getElementById("canvas");
     this.context = canvas.getContext("2d");
+    this.fps = 50;
+    this.then = Date.now();
+    this.fpsInterval = 1000 / this.fps;
+    this.startTime = this.then;
+
     window.addEventListener("keydown", function(e) {
         myGameArea.keys = myGameArea.keys || [];
         myGameArea.keys[e.keyCode] = e.type == "keydown";
@@ -62,31 +67,41 @@ GameArea.prototype.start = function() {
 };
 
 GameArea.prototype.update = function() {
-    this.clear();
+    // request another frame
+    window.requestAnimFrame(this.update.bind(this));
 
-    myGamePiece.speedY = 0;
-    myGamePiece.speedX = 0;
-    if (myGameArea.keys && myGameArea.keys[37]) {
-        myGamePiece.speedX = -1;
-    }
-    if (myGameArea.keys && myGameArea.keys[39]) {
-        myGamePiece.speedX = 1;
-    }
-    if (myGameArea.keys && myGameArea.keys[38]) {
-        myGamePiece.speedY = -1;
-    }
-    if (myGameArea.keys && myGameArea.keys[40]) {
-        myGamePiece.speedY = 1;
-    }
-    myGamePiece.newPos();
+    // calc elapsed time since last loop
+    this.now = Date.now();
+    this.elapsed = this.now - this.then;
 
-    if (myGamePiece.isCollisionWith(myObstacle)) {
-        myGamePiece.crash();
-    }
-    myGamePiece.update();
-    myObstacle.update();
+    // if time has elapsed, draw next frame
+    if (this.elapsed > this.fpsInterval) {
+        this.then = this.now - this.elapsed % this.fpsInterval;
 
-    var req = window.requestAnimFrame(this.update.bind(this));
+        this.clear();
+
+        myGamePiece.speedY = 0;
+        myGamePiece.speedX = 0;
+        if (myGameArea.keys && myGameArea.keys[37]) {
+            myGamePiece.speedX = -1;
+        }
+        if (myGameArea.keys && myGameArea.keys[39]) {
+            myGamePiece.speedX = 1;
+        }
+        if (myGameArea.keys && myGameArea.keys[38]) {
+            myGamePiece.speedY = -1;
+        }
+        if (myGameArea.keys && myGameArea.keys[40]) {
+            myGamePiece.speedY = 1;
+        }
+        myGamePiece.newPos();
+
+        if (myGamePiece.isCollisionWith(myObstacle)) {
+            myGamePiece.crash();
+        }
+        myGamePiece.update();
+        myObstacle.update();
+    }
 };
 
 GameArea.prototype.clear = function() {
